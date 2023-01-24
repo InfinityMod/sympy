@@ -1626,27 +1626,80 @@ class LatexPrinter(Printer):
 
     _print_RandomSymbol = _print_Symbol
 
-    def _deal_with_super_sub(self, string: str, style='plain') -> str:
-        if '{' in string:
-            name, supers, subs = string, [], []
-        else:
-            name, supers, subs = split_super_sub(string)
+    def _deal_with_super_sub(self, string, style = "plain"):
+        _state = 0
+        _clamp_cnt = 0
+        _commands = ["^", "_"]
+        _name_idx = len(string)
+        _section_idx = [0]
+        _no_clamp_idx = []
+        
+        string = string.replace("**", "^")
+        for _i, _chr in enumerate(string):
+            # Clamp counter
+            if _chr == "{":
+                _clamp_cnt += 1
+            elif _chr == "}":
+                _clamp_cnt -= 1
+            
+            # "State Machine"
+            if  _state == 0 and _chr in _commands:
+                if _name_idx == len(string):
+                    _name_idx = _i
+                _state = 1
+                _section_idx.append(_i)
+            elif _state == 1:
+                if _chr not in ["{"]:
+                    _no_clamp_idx.append(_i)
+                    _state = 2
+                else:
+                    _state = 3
+                _section_idx.append(_i)
+            elif _clamp_cnt <= 0 and _chr in ([" "] + _commands):
+                if _state == 2:
+                    _no_clamp_idx.append(_i)
+                if _chr in _commands:
+                    _state = 1
+                    _section_idx.append(_i)
+                else:
+                    _state = 0
 
-            name = translate(name)
-            supers = [translate(sup) for sup in supers]
-            subs = [translate(sub) for sub in subs]
+        #Append last indices
+        _section_idx.append(len(string))
+        if _state == 2:
+            _no_clamp_idx.append(len(string))
+       
+        _j = 0
+        for _i in list(range(len(_section_idx)))[1:]:
+            _from = _section_idx[_i-1] + _j
+            _to = _section_idx[_i] + _j
+            _part = string[_from:_to]
 
-        # apply the style only to the name
-        if style == 'bold':
-            name = "\\mathbf{{{}}}".format(name)
+            if _part not in _commands:
+                #Add clamps conditional
+                _start = _stop =  ""
+                if (_from -_j) in _no_clamp_idx:
+                    _start = "{"
+                if  (_to -_j) in _no_clamp_idx:
+                    _stop = "}"
 
-        # glue all items together:
-        if supers:
-            name += "^{%s}" % " ".join(supers)
-        if subs:
-            name += "_{%s}" % " ".join(subs)
+                #Translate inside clamps
+                if (_part[0], _part[-1]) == ("{", "}"):
+                    _translate = "{" + self._deal_with_super_sub(_part[1:-1]) + "}"
+                else:
+                    _translate = translate(_part)
+            else:
+                _translate = _part
+                
+            #Reassemble
+            string = string[:_from] + _start + _translate  + _stop + string[_to:]
+            _j += len(_translate) - (_to-_from) + len(_start) + len(_stop)
 
-        return name
+        if style == "bold":
+            _part = _name_idx
+            string = "\\mathbf{{{}}}".format(string[:_part]) +  string[_part:]
+
+        return string
 
     def _print_Relational(self, expr):
         if self._settings['itex']:
