@@ -36,11 +36,29 @@ if TYPE_CHECKING:
 # Complete list at
 # https://docs.mathjax.org/en/latest/tex.html#supported-latex-commands
 # This variable only contains those functions which SymPy uses.
-accepted_latex_functions = ['arcsin', 'arccos', 'arctan', 'sin', 'cos', 'tan',
-                            'sinh', 'cosh', 'tanh', 'sqrt', 'ln', 'log', 'sec',
-                            'csc', 'cot', 'coth', 're', 'im', 'frac', 'root',
-                            'arg',
-                            ]
+accepted_latex_functions = [
+    'arcsin',
+    'arccos',
+    'arctan',
+    'sin',
+    'cos',
+    'tan',
+    'sinh',
+    'cosh',
+    'tanh',
+    'sqrt',
+    'ln',
+    'log',
+    'sec',
+    'csc',
+    'cot',
+    'coth',
+    're',
+    'im',
+    'frac',
+    'root',
+    'arg',
+]
 
 tex_greek_dictionary = {
     'Alpha': r'\mathrm{A}',
@@ -81,38 +99,40 @@ tex_greek_dictionary = {
     'vartheta': r'\vartheta',
 }
 
-other_symbols = {'aleph', 'beth', 'daleth', 'gimel', 'ell', 'eth', 'hbar',
-                     'hslash', 'mho', 'wp'}
+other_symbols = {
+    'aleph', 'beth', 'daleth', 'gimel', 'ell', 'eth', 'hbar', 'hslash', 'mho',
+    'wp'
+}
 
 # Variable name modifiers
 modifier_dict: dict[str, Callable[[str], str]] = {
     # Accents
-    'mathring': lambda s: r'\mathring{'+s+r'}',
-    'ddddot': lambda s: r'\ddddot{'+s+r'}',
-    'dddot': lambda s: r'\dddot{'+s+r'}',
-    'ddot': lambda s: r'\ddot{'+s+r'}',
-    'dot': lambda s: r'\dot{'+s+r'}',
-    'check': lambda s: r'\check{'+s+r'}',
-    'breve': lambda s: r'\breve{'+s+r'}',
-    'acute': lambda s: r'\acute{'+s+r'}',
-    'grave': lambda s: r'\grave{'+s+r'}',
-    'tilde': lambda s: r'\tilde{'+s+r'}',
-    'hat': lambda s: r'\hat{'+s+r'}',
-    'bar': lambda s: r'\bar{'+s+r'}',
-    'vec': lambda s: r'\vec{'+s+r'}',
-    'prime': lambda s: "{"+s+"}'",
-    'prm': lambda s: "{"+s+"}'",
+    'mathring': lambda s: r'\mathring{' + s + r'}',
+    'ddddot': lambda s: r'\ddddot{' + s + r'}',
+    'dddot': lambda s: r'\dddot{' + s + r'}',
+    'ddot': lambda s: r'\ddot{' + s + r'}',
+    'dot': lambda s: r'\dot{' + s + r'}',
+    'check': lambda s: r'\check{' + s + r'}',
+    'breve': lambda s: r'\breve{' + s + r'}',
+    'acute': lambda s: r'\acute{' + s + r'}',
+    'grave': lambda s: r'\grave{' + s + r'}',
+    'tilde': lambda s: r'\tilde{' + s + r'}',
+    'hat': lambda s: r'\hat{' + s + r'}',
+    'bar': lambda s: r'\bar{' + s + r'}',
+    'vec': lambda s: r'\vec{' + s + r'}',
+    'prime': lambda s: "{" + s + "}'",
+    'prm': lambda s: "{" + s + "}'",
     # Faces
-    'bold': lambda s: r'\boldsymbol{'+s+r'}',
-    'bm': lambda s: r'\boldsymbol{'+s+r'}',
-    'cal': lambda s: r'\mathcal{'+s+r'}',
-    'scr': lambda s: r'\mathscr{'+s+r'}',
-    'frak': lambda s: r'\mathfrak{'+s+r'}',
+    'bold': lambda s: r'\boldsymbol{' + s + r'}',
+    'bm': lambda s: r'\boldsymbol{' + s + r'}',
+    'cal': lambda s: r'\mathcal{' + s + r'}',
+    'scr': lambda s: r'\mathscr{' + s + r'}',
+    'frak': lambda s: r'\mathfrak{' + s + r'}',
     # Brackets
-    'norm': lambda s: r'\left\|{'+s+r'}\right\|',
-    'avg': lambda s: r'\left\langle{'+s+r'}\right\rangle',
-    'abs': lambda s: r'\left|{'+s+r'}\right|',
-    'mag': lambda s: r'\left|{'+s+r'}\right|',
+    'norm': lambda s: r'\left\|{' + s + r'}\right\|',
+    'avg': lambda s: r'\left\langle{' + s + r'}\right\rangle',
+    'abs': lambda s: r'\left|{' + s + r'}\right|',
+    'mag': lambda s: r'\left|{' + s + r'}\right|',
 }
 
 greek_letters_set = frozenset(greeks)
@@ -172,8 +192,7 @@ class LatexPrinter(Printer):
         Printer.__init__(self, settings)
 
         if 'mode' in self._settings:
-            valid_modes = ['inline', 'plain', 'equation',
-                           'equation*']
+            valid_modes = ['inline', 'plain', 'equation', 'equation*']
             if self._settings['mode'] not in valid_modes:
                 raise ValueError("'mode' must be one of 'inline', 'plain', "
                                  "'equation' or 'equation*'")
@@ -198,8 +217,8 @@ class LatexPrinter(Printer):
             self._settings['mul_symbol_latex_numbers'] = \
                 mul_symbol_table[self._settings['mul_symbol'] or 'dot']
         except KeyError:
-            if (self._settings['mul_symbol'].strip() in
-                    ['', ' ', '\\', '\\,', '\\:', '\\;', '\\quad']):
+            if (self._settings['mul_symbol'].strip()
+                    in ['', ' ', '\\', '\\,', '\\:', '\\;', '\\quad']):
                 self._settings['mul_symbol_latex_numbers'] = \
                     mul_symbol_table['dot']
             else:
@@ -218,7 +237,8 @@ class LatexPrinter(Printer):
             "tj": r"\text{j}",
         }
         imag_unit = self._settings['imaginary_unit']
-        self._settings['imaginary_unit_latex'] = imaginary_unit_table.get(imag_unit, imag_unit)
+        self._settings['imaginary_unit_latex'] = imaginary_unit_table.get(
+            imag_unit, imag_unit)
 
         diff_operator_table = {
             None: r"d",
@@ -227,7 +247,8 @@ class LatexPrinter(Printer):
             "td": r"\text{d}",
         }
         diff_operator = self._settings['diff_operator']
-        self._settings["diff_operator_latex"] = diff_operator_table.get(diff_operator, diff_operator)
+        self._settings["diff_operator_latex"] = diff_operator_table.get(
+            diff_operator, diff_operator)
 
     def _add_parens(self, s) -> str:
         return r"\left({}\right)".format(s)
@@ -279,9 +300,10 @@ class LatexPrinter(Printer):
         printed, False otherwise. For example: a + b => True; a => False;
         10 => False; -10 => True.
         """
-        return not ((expr.is_Integer and expr.is_nonnegative)
-                    or (expr.is_Atom and (expr is not S.NegativeOne
-                                          and expr.is_Rational is False)))
+        return not (
+            (expr.is_Integer and expr.is_nonnegative) or
+            (expr.is_Atom and
+             (expr is not S.NegativeOne and expr.is_Rational is False)))
 
     def _needs_function_brackets(self, expr) -> bool:
         """
@@ -329,10 +351,9 @@ class LatexPrinter(Printer):
             return True
         if expr.is_Piecewise:
             return True
-        if any(expr.has(x) for x in (Mod,)):
+        if any(expr.has(x) for x in (Mod, )):
             return True
-        if (not last and
-                any(expr.has(x) for x in (Integral, Product, Sum))):
+        if (not last and any(expr.has(x) for x in (Integral, Product, Sum))):
             return True
 
         return False
@@ -345,7 +366,7 @@ class LatexPrinter(Printer):
         """
         if expr.is_Relational:
             return True
-        if any(expr.has(x) for x in (Mod,)):
+        if any(expr.has(x) for x in (Mod, )):
             return True
         if expr.is_Add:
             return True
@@ -431,7 +452,8 @@ class LatexPrinter(Printer):
                 init_printing(perm_cyclic={perm_cyclic}).
                 """,
                 deprecated_since_version="1.6",
-                active_deprecations_target="deprecated-permutation-print_cyclic",
+                active_deprecations_target=
+                "deprecated-permutation-print_cyclic",
                 stacklevel=8,
             )
         else:
@@ -451,7 +473,6 @@ class LatexPrinter(Printer):
         mat = r" \\ ".join((row1, row2))
         return r"\begin{pmatrix} %s \end{pmatrix}" % mat
 
-
     def _print_AppliedPermutation(self, expr):
         perm, var = expr.args
         return r"\sigma_{%s}(%s)" % (self._print(perm), self._print(var))
@@ -462,7 +483,11 @@ class LatexPrinter(Printer):
         strip = False if self._settings['full_prec'] else True
         low = self._settings["min"] if "min" in self._settings else None
         high = self._settings["max"] if "max" in self._settings else None
-        str_real = mlib_to_str(expr._mpf_, dps, strip_zeros=strip, min_fixed=low, max_fixed=high)
+        str_real = mlib_to_str(expr._mpf_,
+                               dps,
+                               strip_zeros=strip,
+                               min_fixed=low,
+                               max_fixed=high)
 
         # Must always have a mul symbol (as 2.5 10^{20} just looks odd)
         # thus we use the number separator
@@ -474,7 +499,7 @@ class LatexPrinter(Printer):
             if exp[0] == '+':
                 exp = exp[1:]
             if self._settings['decimal_separator'] == 'comma':
-                mant = mant.replace('.','{,}')
+                mant = mant.replace('.', '{,}')
 
             return r"%s%s10^{%s}" % (mant, separator, exp)
         elif str_real == "+inf":
@@ -483,7 +508,7 @@ class LatexPrinter(Printer):
             return r"- \infty"
         else:
             if self._settings['decimal_separator'] == 'comma':
-                str_real = str_real.replace('.','{,}')
+                str_real = str_real.replace('.', '{,}')
             return str_real
 
     def _print_Cross(self, expr):
@@ -529,10 +554,16 @@ class LatexPrinter(Printer):
                     args = list(expr.args)
 
                 # If there are quantities or prefixes, append them at the back.
-                units, nonunits = sift(args, lambda x: (hasattr(x, "_scale_factor") or hasattr(x, "is_physical_constant")) or
-                              (isinstance(x, Pow) and
-                               hasattr(x.base, "is_physical_constant")), binary=True)
-                prefixes, units = sift(units, lambda x: hasattr(x, "_scale_factor"), binary=True)
+                units, nonunits = sift(args,
+                                       lambda x:
+                                       (hasattr(x, "_scale_factor") or hasattr(
+                                           x, "is_physical_constant")) or
+                                       (isinstance(x, Pow) and hasattr(
+                                           x.base, "is_physical_constant")),
+                                       binary=True)
+                prefixes, units = sift(units,
+                                       lambda x: hasattr(x, "_scale_factor"),
+                                       binary=True)
                 return convert_args(nonunits + prefixes + units)
 
         def convert_args(args) -> str:
@@ -540,8 +571,10 @@ class LatexPrinter(Printer):
 
             for i, term in enumerate(args):
                 term_tex = self._print(term)
-                if not (hasattr(term, "_scale_factor") or hasattr(term, "is_physical_constant")):
-                    if self._needs_mul_brackets(term, first=(i == 0),
+                if not (hasattr(term, "_scale_factor")
+                        or hasattr(term, "is_physical_constant")):
+                    if self._needs_mul_brackets(term,
+                                                first=(i == 0),
                                                 last=(i == len(args) - 1)):
                         term_tex = r"\left(%s\right)" % term_tex
 
@@ -565,7 +598,8 @@ class LatexPrinter(Printer):
         # XXX: _print_Pow calls this routine with instances of Pow...
         if isinstance(expr, Mul):
             args = expr.args
-            if args[0] is S.One or any(isinstance(arg, Number) for arg in args[1:]):
+            if args[0] is S.One or any(
+                    isinstance(arg, Number) for arg in args[1:]):
                 return convert_args(args)
 
         include_parens = False
@@ -677,9 +711,11 @@ class LatexPrinter(Printer):
                     base_q: int = expr.base.q  # type: ignore
                     if base_p * base_q == abs(base_q):
                         if expr.exp == -1:
-                            return r"\frac{1}{\frac{%s}{%s}}" % (base_p, base_q)
+                            return r"\frac{1}{\frac{%s}{%s}}" % (base_p,
+                                                                 base_q)
                         else:
-                            return r"\frac{1}{(\frac{%s}{%s})^{%s}}" % (base_p, base_q, abs(expr.exp))
+                            return r"\frac{1}{(\frac{%s}{%s})^{%s}}" % (
+                                base_p, base_q, abs(expr.exp))
                 # things like 1/x
                 return self._print_Mul(expr)
         if expr.base.is_Function:
@@ -694,12 +730,11 @@ class LatexPrinter(Printer):
         base = self.parenthesize(expr.base, PRECEDENCE['Pow'])
         if expr.base.is_Symbol:
             base = self.parenthesize_super(base)
-        elif (isinstance(expr.base, Derivative)
-            and base.startswith(r'\left(')
-            and re.match(r'\\left\(\\d?d?dot', base)
-            and base.endswith(r'\right)')):
+        elif (isinstance(expr.base, Derivative) and base.startswith(r'\left(')
+              and re.match(r'\\left\(\\d?d?dot', base)
+              and base.endswith(r'\right)')):
             # don't use parentheses around dotted derivative
-            base = base[6: -7]  # remove outermost added parens
+            base = base[6:-7]  # remove outermost added parens
         return template % (base, exp)
 
     def _print_UnevaluatedExpr(self, expr):
@@ -710,6 +745,7 @@ class LatexPrinter(Printer):
             tex = r"\sum_{%s=%s}^{%s} " % \
                 tuple([self._print(i) for i in expr.limits[0]])
         else:
+
             def _format_ineq(l):
                 return r"%s \leq %s \leq %s" % \
                     tuple([self._print(s) for s in (l[1], l[0], l[2])])
@@ -729,6 +765,7 @@ class LatexPrinter(Printer):
             tex = r"\prod_{%s=%s}^{%s} " % \
                 tuple([self._print(i) for i in expr.limits[0]])
         else:
+
             def _format_ineq(l):
                 return r"%s \leq %s \leq %s" % \
                     tuple([self._print(s) for s in (l[1], l[0], l[2])])
@@ -775,7 +812,7 @@ class LatexPrinter(Printer):
 
     def _print_Indexed(self, expr):
         tex_base = self._print(expr.base)
-        tex = '{'+tex_base+'}'+'_{%s}' % ','.join(
+        tex = '{' + tex_base + '}' + '_{%s}' % ','.join(
             map(self._print, expr.indices))
         return tex
 
@@ -791,9 +828,9 @@ class LatexPrinter(Printer):
             else:
                 lower = self._print(S.Zero)
             interval = '{lower}\\mathrel{{..}}\\nobreak {upper}'.format(
-                    lower = lower, upper = upper)
-            return '{{{label}}}_{{{interval}}}'.format(
-                label = label, interval = interval)
+                lower=lower, upper=upper)
+            return '{{{label}}}_{{{interval}}}'.format(label=label,
+                                                       interval=interval)
         #if no bounds are defined this just prints the label
         return label
 
@@ -811,8 +848,8 @@ class LatexPrinter(Printer):
                 tex += r"%s %s" % (diff_symbol, self._print(x))
             else:
                 tex += r"%s %s^{%s}" % (diff_symbol,
-                                        self.parenthesize_super(self._print(x)),
-                                        self._print(num))
+                                        self.parenthesize_super(
+                                            self._print(x)), self._print(num))
 
         if dim == 1:
             tex = r"\frac{%s}{%s}" % (diff_symbol, tex)
@@ -820,23 +857,23 @@ class LatexPrinter(Printer):
             tex = r"\frac{%s^{%s}}{%s}" % (diff_symbol, self._print(dim), tex)
 
         if any(i.could_extract_minus_sign() for i in expr.args):
-            return r"%s %s" % (tex, self.parenthesize(expr.expr,
-                                                  PRECEDENCE["Mul"],
-                                                  is_neg=True,
-                                                  strict=True))
+            return r"%s %s" % (
+                tex,
+                self.parenthesize(
+                    expr.expr, PRECEDENCE["Mul"], is_neg=True, strict=True))
 
-        return r"%s %s" % (tex, self.parenthesize(expr.expr,
-                                                  PRECEDENCE["Mul"],
-                                                  is_neg=False,
-                                                  strict=True))
+        return r"%s %s" % (
+            tex,
+            self.parenthesize(
+                expr.expr, PRECEDENCE["Mul"], is_neg=False, strict=True))
 
     def _print_Subs(self, subs):
         expr, old, new = subs.args
         latex_expr = self._print(expr)
         latex_old = (self._print(e) for e in old)
         latex_new = (self._print(e) for e in new)
-        latex_subs = r'\\ '.join(
-            e[0] + '=' + e[1] for e in zip(latex_old, latex_new))
+        latex_subs = r'\\ '.join(e[0] + '=' + e[1]
+                                 for e in zip(latex_old, latex_new))
         return r'\left. %s \right|_{\substack{ %s }}' % (latex_expr,
                                                          latex_subs)
 
@@ -848,9 +885,11 @@ class LatexPrinter(Printer):
         if len(expr.limits) <= 4 and all(len(lim) == 1 for lim in expr.limits):
             # Use len(expr.limits)-1 so that syntax highlighters don't think
             # \" is an escaped quote
-            tex = r"\i" + "i"*(len(expr.limits) - 1) + "nt"
-            symbols = [r"\, %s%s" % (diff_symbol, self._print(symbol[0]))
-                       for symbol in expr.limits]
+            tex = r"\i" + "i" * (len(expr.limits) - 1) + "nt"
+            symbols = [
+                r"\, %s%s" % (diff_symbol, self._print(symbol[0]))
+                for symbol in expr.limits
+            ]
 
         else:
             for lim in reversed(expr.limits):
@@ -863,18 +902,21 @@ class LatexPrinter(Printer):
                         tex += r"\limits"
 
                     if len(lim) == 3:
-                        tex += "_{%s}^{%s}" % (self._print(lim[1]),
-                                               self._print(lim[2]))
+                        tex += "_{%s}^{%s}" % (self._print(
+                            lim[1]), self._print(lim[2]))
                     if len(lim) == 2:
                         tex += "^{%s}" % (self._print(lim[1]))
 
-                symbols.insert(0, r"\, %s%s" % (diff_symbol, self._print(symbol)))
+                symbols.insert(0,
+                               r"\, %s%s" % (diff_symbol, self._print(symbol)))
 
-        return r"%s %s%s" % (tex, self.parenthesize(expr.function,
-                                                    PRECEDENCE["Mul"],
-                                                    is_neg=any(i.could_extract_minus_sign() for i in expr.args),
-                                                    strict=True),
-                             "".join(symbols))
+        return r"%s %s%s" % (tex,
+                             self.parenthesize(
+                                 expr.function,
+                                 PRECEDENCE["Mul"],
+                                 is_neg=any(i.could_extract_minus_sign()
+                                            for i in expr.args),
+                                 strict=True), "".join(symbols))
 
     def _print_Limit(self, expr):
         e, z, z0, dir = expr.args
@@ -903,21 +945,20 @@ class LatexPrinter(Printer):
         subscriptidx = func.find("_")
         if func in accepted_latex_functions:
             name = r"\%s" % func
-        elif len(func) == 1 or func.startswith('\\') or subscriptidx == 1 or superscriptidx == 1:
+        elif len(func) == 1 or func.startswith(
+                '\\') or subscriptidx == 1 or superscriptidx == 1:
             name = func
         else:
             if superscriptidx > 0 and subscriptidx > 0:
-                name = r"\operatorname{%s}%s" %(
-                    func[:min(subscriptidx,superscriptidx)],
-                    func[min(subscriptidx,superscriptidx):])
+                name = r"\operatorname{%s}%s" % (
+                    func[:min(subscriptidx, superscriptidx)],
+                    func[min(subscriptidx, superscriptidx):])
             elif superscriptidx > 0:
-                name = r"\operatorname{%s}%s" %(
-                    func[:superscriptidx],
-                    func[superscriptidx:])
+                name = r"\operatorname{%s}%s" % (func[:superscriptidx],
+                                                 func[superscriptidx:])
             elif subscriptidx > 0:
-                name = r"\operatorname{%s}%s" %(
-                    func[:subscriptidx],
-                    func[subscriptidx:])
+                name = r"\operatorname{%s}%s" % (func[:subscriptidx],
+                                                 func[subscriptidx:])
             else:
                 name = r"\operatorname{%s}" % func
         return name
@@ -951,10 +992,18 @@ class LatexPrinter(Printer):
                 not self._needs_function_brackets(expr.args[0])
 
             inv_trig_table = [
-                "asin", "acos", "atan",
-                "acsc", "asec", "acot",
-                "asinh", "acosh", "atanh",
-                "acsch", "asech", "acoth",
+                "asin",
+                "acos",
+                "atan",
+                "acsc",
+                "asec",
+                "acot",
+                "asinh",
+                "acosh",
+                "atanh",
+                "acsch",
+                "asech",
+                "acoth",
             ]
 
             # If the function is an inverse trig function, handle the style
@@ -1014,12 +1063,14 @@ class LatexPrinter(Printer):
         from sympy.functions.special.beta_functions import beta
         from sympy.functions.special.delta_functions import DiracDelta
         from sympy.functions.special.error_functions import Chi
-        return {KroneckerDelta: r'\delta',
-                gamma:  r'\Gamma',
-                lowergamma: r'\gamma',
-                beta: r'\operatorname{B}',
-                DiracDelta: r'\delta',
-                Chi: r'\operatorname{Chi}'}
+        return {
+            KroneckerDelta: r'\delta',
+            gamma: r'\Gamma',
+            lowergamma: r'\gamma',
+            beta: r'\operatorname{B}',
+            DiracDelta: r'\delta',
+            Chi: r'\operatorname{Chi}'
+        }
 
     def _print_FunctionClass(self, expr):
         for cls in self._special_function_classes:
@@ -1045,8 +1096,8 @@ class LatexPrinter(Printer):
     def _hprint_variadic_function(self, expr, exp=None) -> str:
         args = sorted(expr.args, key=default_sort_key)
         texargs = [r"%s" % self._print(symbol) for symbol in args]
-        tex = r"\%s\left(%s\right)" % (str(expr.func).lower(),
-                                       ", ".join(texargs))
+        tex = r"\%s\left(%s\right)" % (str(
+            expr.func).lower(), ", ".join(texargs))
         if exp is not None:
             return r"%s^{%s}" % (tex, exp)
         else:
@@ -1091,17 +1142,21 @@ class LatexPrinter(Printer):
 
     def _print_re(self, expr, exp=None):
         if self._settings['gothic_re_im']:
-            tex = r"\Re{%s}" % self.parenthesize(expr.args[0], PRECEDENCE['Atom'])
+            tex = r"\Re{%s}" % self.parenthesize(expr.args[0],
+                                                 PRECEDENCE['Atom'])
         else:
-            tex = r"\operatorname{{re}}{{{}}}".format(self.parenthesize(expr.args[0], PRECEDENCE['Atom']))
+            tex = r"\operatorname{{re}}{{{}}}".format(
+                self.parenthesize(expr.args[0], PRECEDENCE['Atom']))
 
         return self._do_exponent(tex, exp)
 
     def _print_im(self, expr, exp=None):
         if self._settings['gothic_re_im']:
-            tex = r"\Im{%s}" % self.parenthesize(expr.args[0], PRECEDENCE['Atom'])
+            tex = r"\Im{%s}" % self.parenthesize(expr.args[0],
+                                                 PRECEDENCE['Atom'])
         else:
-            tex = r"\operatorname{{im}}{{{}}}".format(self.parenthesize(expr.args[0], PRECEDENCE['Atom']))
+            tex = r"\operatorname{{im}}{{{}}}".format(
+                self.parenthesize(expr.args[0], PRECEDENCE['Atom']))
 
         return self._do_exponent(tex, exp)
 
@@ -1231,16 +1286,18 @@ class LatexPrinter(Printer):
         tex = r"\left(%s, %s\right)" % (largs[0], largs[1])
 
         if exp is not None:
-            return r"\operatorname{%s}_{(%s, %s)}^{%s}%s" % (operator, largs[2], largs[3], exp, tex)
+            return r"\operatorname{%s}_{(%s, %s)}^{%s}%s" % (
+                operator, largs[2], largs[3], exp, tex)
         else:
-            return r"\operatorname{%s}_{(%s, %s)}%s" % (operator, largs[2], largs[3], tex)
+            return r"\operatorname{%s}_{(%s, %s)}%s" % (operator, largs[2],
+                                                        largs[3], tex)
 
     def _print_betainc_regularized(self, expr, exp=None):
         return self._print_betainc(expr, exp, operator='I')
 
     def _print_uppergamma(self, expr, exp=None):
-        tex = r"\left(%s, %s\right)" % (self._print(expr.args[0]),
-                                        self._print(expr.args[1]))
+        tex = r"\left(%s, %s\right)" % (self._print(
+            expr.args[0]), self._print(expr.args[1]))
 
         if exp is not None:
             return r"\Gamma^{%s}%s" % (exp, tex)
@@ -1248,8 +1305,8 @@ class LatexPrinter(Printer):
             return r"\Gamma%s" % tex
 
     def _print_lowergamma(self, expr, exp=None):
-        tex = r"\left(%s, %s\right)" % (self._print(expr.args[0]),
-                                        self._print(expr.args[1]))
+        tex = r"\left(%s, %s\right)" % (self._print(
+            expr.args[0]), self._print(expr.args[1]))
 
         if exp is not None:
             return r"\gamma^{%s}%s" % (exp, tex)
@@ -1324,8 +1381,8 @@ class LatexPrinter(Printer):
             return tex
 
     def _print_binomial(self, expr, exp=None):
-        tex = r"{\binom{%s}{%s}}" % (self._print(expr.args[0]),
-                                     self._print(expr.args[1]))
+        tex = r"{\binom{%s}{%s}}" % (self._print(
+            expr.args[0]), self._print(expr.args[1]))
 
         if exp is not None:
             return r"%s^{%s}" % (tex, exp)
@@ -1358,8 +1415,8 @@ class LatexPrinter(Printer):
             else:
                 need_exp = True
 
-        tex = r"%s_{%s}\left(%s\right)" % (tex, self._print(expr.order),
-                                           self._print(expr.argument))
+        tex = r"%s_{%s}\left(%s\right)" % (tex, self._print(
+            expr.order), self._print(expr.argument))
 
         if need_exp:
             tex = self._do_exponent(tex, exp)
@@ -1570,11 +1627,16 @@ class LatexPrinter(Printer):
             tex = r"\left(" + tex + r"\right)^{%s}" % (exp)
         return tex
 
-    def __print_mathieu_functions(self, character, args, prime=False, exp=None):
+    def __print_mathieu_functions(self,
+                                  character,
+                                  args,
+                                  prime=False,
+                                  exp=None):
         a, q, z = map(self._print, args)
         sup = r"^{\prime}" if prime else ""
         exp = "" if not exp else "^{%s}" % exp
-        return r"%s%s\left(%s, %s, %s\right)%s" % (character, sup, a, q, z, exp)
+        return r"%s%s\left(%s, %s, %s\right)%s" % (character, sup, a, q, z,
+                                                   exp)
 
     def _print_mathieuc(self, expr, exp=None):
         return self.__print_mathieu_functions("C", expr.args, exp=exp)
@@ -1583,10 +1645,16 @@ class LatexPrinter(Printer):
         return self.__print_mathieu_functions("S", expr.args, exp=exp)
 
     def _print_mathieucprime(self, expr, exp=None):
-        return self.__print_mathieu_functions("C", expr.args, prime=True, exp=exp)
+        return self.__print_mathieu_functions("C",
+                                              expr.args,
+                                              prime=True,
+                                              exp=exp)
 
     def _print_mathieusprime(self, expr, exp=None):
-        return self.__print_mathieu_functions("S", expr.args, prime=True, exp=exp)
+        return self.__print_mathieu_functions("S",
+                                              expr.args,
+                                              prime=True,
+                                              exp=exp)
 
     def _print_Rational(self, expr):
         if expr.q != 1:
@@ -1626,14 +1694,14 @@ class LatexPrinter(Printer):
 
     _print_RandomSymbol = _print_Symbol
 
-    def _deal_with_super_sub(self, string, style = "plain"):
+    def _deal_with_super_sub(self, string, style="plain"):
         _state = 0
         _clamp_cnt = 0
         _commands = ["^", "_"]
         _name_idx = len(string)
         _section_idx = [0]
         _no_clamp_idx = []
-        
+
         string = string.replace("**", "^")
         for _i, _chr in enumerate(string):
             # Clamp counter
@@ -1641,9 +1709,9 @@ class LatexPrinter(Printer):
                 _clamp_cnt += 1
             elif _chr == "}":
                 _clamp_cnt -= 1
-            
+
             # "State Machine"
-            if  _state == 0 and _chr in _commands:
+            if _state == 0 and _chr in _commands:
                 if _name_idx == len(string):
                     _name_idx = _i
                 _state = 1
@@ -1668,36 +1736,43 @@ class LatexPrinter(Printer):
         _section_idx.append(len(string))
         if _state == 2:
             _no_clamp_idx.append(len(string))
-       
+
         _j = 0
+        _previous_part = None
         for _i in list(range(len(_section_idx)))[1:]:
-            _from = _section_idx[_i-1] + _j
+            _from = _section_idx[_i - 1] + _j
             _to = _section_idx[_i] + _j
             _part = string[_from:_to]
 
             if _part not in _commands:
                 #Add clamps conditional
-                _start = _stop =  ""
-                if (_from -_j) in _no_clamp_idx:
+                _start = _stop = ""
+                if (_from - _j) in _no_clamp_idx:
                     _start = "{"
-                if  (_to -_j) in _no_clamp_idx:
+                if (_to - _j) in _no_clamp_idx:
                     _stop = "}"
 
                 #Translate inside clamps
                 if (_part[0], _part[-1]) == ("{", "}"):
-                    _translate = "{" + self._deal_with_super_sub(_part[1:-1]) + "}"
+                    if len(_part) > 3 and _previous_part == '_':
+                        _translate = r"{\mathit{" + self._deal_with_super_sub(
+                            _part[1:-1]) + r"}}"
+                    else:
+                        _translate = "{" + self._deal_with_super_sub(
+                            _part[1:-1]) + "}"
                 else:
                     _translate = translate(_part)
             else:
                 _translate = _part
-                
+
             #Reassemble
-            string = string[:_from] + _start + _translate  + _stop + string[_to:]
-            _j += len(_translate) - (_to-_from) + len(_start) + len(_stop)
+            _previous_part = _part
+            string = string[:_from] + _start + _translate + _stop + string[_to:]
+            _j += len(_translate) - (_to - _from) + len(_start) + len(_stop)
 
         if style == "bold":
             _part = _name_idx
-            string = "\\mathbf{{{}}}".format(string[:_part]) +  string[_part:]
+            string = "\\mathbf{{{}}}".format(string[:_part]) + string[_part:]
 
         return string
 
@@ -1718,19 +1793,20 @@ class LatexPrinter(Printer):
             "!=": r"\neq",
         }
 
-        return "%s %s %s" % (self._print(expr.lhs),
-                             charmap[expr.rel_op], self._print(expr.rhs))
+        return "%s %s %s" % (self._print(
+            expr.lhs), charmap[expr.rel_op], self._print(expr.rhs))
 
     def _print_Piecewise(self, expr):
-        ecpairs = [r"%s & \text{for}\: %s" % (self._print(e), self._print(c))
-                   for e, c in expr.args[:-1]]
+        ecpairs = [
+            r"%s & \text{for}\: %s" % (self._print(e), self._print(c))
+            for e, c in expr.args[:-1]
+        ]
         if expr.args[-1].cond == true:
             ecpairs.append(r"%s & \text{otherwise}" %
                            self._print(expr.args[-1].expr))
         else:
-            ecpairs.append(r"%s & \text{for}\: %s" %
-                           (self._print(expr.args[-1].expr),
-                            self._print(expr.args[-1].cond)))
+            ecpairs.append(r"%s & \text{for}\: %s" % (self._print(
+                expr.args[-1].expr), self._print(expr.args[-1].cond)))
         tex = r"\begin{cases} %s \end{cases}"
         return tex % r" \\".join(ecpairs)
 
@@ -1753,7 +1829,7 @@ class LatexPrinter(Printer):
         out_str = r'\begin{%MATSTR%}%s\end{%MATSTR%}'
         out_str = out_str.replace('%MATSTR%', mat_str)
         if mat_str == 'array':
-            out_str = out_str.replace('%s', '{' + 'c'*expr.cols + '}%s')
+            out_str = out_str.replace('%s', '{' + 'c' * expr.cols + '}%s')
         return out_str % r"\\".join(lines)
 
     def _print_MatrixBase(self, expr):
@@ -1770,6 +1846,7 @@ class LatexPrinter(Printer):
             + '_{%s, %s}' % (self._print(expr.i), self._print(expr.j))
 
     def _print_MatrixSlice(self, expr):
+
         def latexslice(x, dim):
             x = list(x)
             if x[2] == 1:
@@ -1778,10 +1855,13 @@ class LatexPrinter(Printer):
                 x[0] = None
             if x[1] == dim:
                 x[1] = None
-            return ':'.join(self._print(xi) if xi is not None else '' for xi in x)
-        return (self.parenthesize(expr.parent, PRECEDENCE["Atom"], strict=True) + r'\left[' +
-                latexslice(expr.rowslice, expr.parent.rows) + ', ' +
-                latexslice(expr.colslice, expr.parent.cols) + r'\right]')
+            return ':'.join(
+                self._print(xi) if xi is not None else '' for xi in x)
+
+        return (
+            self.parenthesize(expr.parent, PRECEDENCE["Atom"], strict=True) +
+            r'\left[' + latexslice(expr.rowslice, expr.parent.rows) + ', ' +
+            latexslice(expr.colslice, expr.parent.cols) + r'\right]')
 
     def _print_BlockMatrix(self, expr):
         return self._print(expr.blocks)
@@ -1789,8 +1869,8 @@ class LatexPrinter(Printer):
     def _print_Transpose(self, expr):
         mat = expr.arg
         from sympy.matrices import MatrixSymbol, BlockMatrix
-        if (not isinstance(mat, MatrixSymbol) and
-            not isinstance(mat, BlockMatrix) and mat.is_MatrixExpr):
+        if (not isinstance(mat, MatrixSymbol)
+                and not isinstance(mat, BlockMatrix) and mat.is_MatrixExpr):
             return r"\left(%s\right)^{T}" % self._print(mat)
         else:
             s = self.parenthesize(mat, precedence_traditional(expr), True)
@@ -1806,8 +1886,8 @@ class LatexPrinter(Printer):
     def _print_Adjoint(self, expr):
         mat = expr.arg
         from sympy.matrices import MatrixSymbol, BlockMatrix
-        if (not isinstance(mat, MatrixSymbol) and
-            not isinstance(mat, BlockMatrix) and mat.is_MatrixExpr):
+        if (not isinstance(mat, MatrixSymbol)
+                and not isinstance(mat, BlockMatrix) and mat.is_MatrixExpr):
             return r"\left(%s\right)^{\dagger}" % self._print(mat)
         else:
             s = self.parenthesize(mat, precedence_traditional(expr), True)
@@ -1838,10 +1918,10 @@ class LatexPrinter(Printer):
         if mat.is_MatrixExpr:
             from sympy.matrices.expressions.blockmatrix import BlockMatrix
             if isinstance(mat, BlockMatrix):
-                return r"\left|{%s}\right|" % self._print_matrix_contents(mat.blocks)
+                return r"\left|{%s}\right|" % self._print_matrix_contents(
+                    mat.blocks)
             return r"\left|{%s}\right|" % self._print(mat)
         return r"\left|{%s}\right|" % self._print_matrix_contents(mat)
-
 
     def _print_Mod(self, expr, exp=None):
         if exp is not None:
@@ -1851,12 +1931,9 @@ class LatexPrinter(Printer):
                  self.parenthesize(expr.args[1], PRECEDENCE['Mul'],
                                    strict=True),
                  exp)
-        return r'%s \bmod %s' % (self.parenthesize(expr.args[0],
-                                                   PRECEDENCE['Mul'],
-                                                   strict=True),
-                                 self.parenthesize(expr.args[1],
-                                                   PRECEDENCE['Mul'],
-                                                   strict=True))
+        return r'%s \bmod %s' % (
+            self.parenthesize(expr.args[0], PRECEDENCE['Mul'], strict=True),
+            self.parenthesize(expr.args[1], PRECEDENCE['Mul'], strict=True))
 
     def _print_HadamardProduct(self, expr):
         args = expr.args
@@ -1886,7 +1963,7 @@ class LatexPrinter(Printer):
         from sympy.matrices import MatrixSymbol
         if not isinstance(base, MatrixSymbol) and base.is_MatrixExpr:
             return "\\left(%s\\right)^{%s}" % (self._print(base),
-                                              self._print(exp))
+                                               self._print(exp))
         else:
             base_str = self._print(base)
             if '^' in base_str:
@@ -1895,8 +1972,8 @@ class LatexPrinter(Printer):
                 return "%s^{%s}" % (base_str, self._print(exp))
 
     def _print_MatrixSymbol(self, expr):
-        return self._print_Symbol(expr, style=self._settings[
-            'mat_symbol_style'])
+        return self._print_Symbol(expr,
+                                  style=self._settings['mat_symbol_style'])
 
     def _print_ZeroMatrix(self, Z):
         return "0" if self._settings[
@@ -1931,7 +2008,7 @@ class LatexPrinter(Printer):
         block_str = r'\begin{%MATSTR%}%s\end{%MATSTR%}'
         block_str = block_str.replace('%MATSTR%', mat_str)
         if mat_str == 'array':
-            block_str= block_str.replace('%s','{}%s')
+            block_str = block_str.replace('%s', '{}%s')
         if self._settings['mat_delim']:
             left_delim: str = self._settings['mat_delim']
             right_delim = self._delim_dict[left_delim]
@@ -1946,20 +2023,20 @@ class LatexPrinter(Printer):
         for outer_i in itertools.product(*shape_ranges):
             level_str[-1].append(self._print(expr[outer_i]))
             even = True
-            for back_outer_i in range(expr.rank()-1, -1, -1):
-                if len(level_str[back_outer_i+1]) < expr.shape[back_outer_i]:
+            for back_outer_i in range(expr.rank() - 1, -1, -1):
+                if len(level_str[back_outer_i + 1]) < expr.shape[back_outer_i]:
                     break
                 if even:
-                    level_str[back_outer_i].append(
-                        r" & ".join(level_str[back_outer_i+1]))
+                    level_str[back_outer_i].append(r" & ".join(
+                        level_str[back_outer_i + 1]))
                 else:
                     level_str[back_outer_i].append(
-                        block_str % (r"\\".join(level_str[back_outer_i+1])))
-                    if len(level_str[back_outer_i+1]) == 1:
+                        block_str % (r"\\".join(level_str[back_outer_i + 1])))
+                    if len(level_str[back_outer_i + 1]) == 1:
                         level_str[back_outer_i][-1] = r"\left[" + \
                             level_str[back_outer_i][-1] + r"\right]"
                 even = not even
-                level_str[back_outer_i+1] = []
+                level_str[back_outer_i + 1] = []
 
         out_str = level_str[0][0]
 
@@ -2011,8 +2088,7 @@ class LatexPrinter(Printer):
         # prints expressions like "A(a)", "3*A(a)", "(1+x)*A(a)"
         sign, args = expr._get_args_for_traditional_printer()
         return sign + "".join(
-            [self.parenthesize(arg, precedence(expr)) for arg in args]
-        )
+            [self.parenthesize(arg, precedence(expr)) for arg in args])
 
     def _print_TensAdd(self, expr):
         a = []
@@ -2025,41 +2101,38 @@ class LatexPrinter(Printer):
         return s
 
     def _print_TensorIndex(self, expr):
-        return "{}%s{%s}" % (
-            "^" if expr.is_up else "_",
-            self._print(expr.args[0])
-        )
+        return "{}%s{%s}" % ("^" if expr.is_up else "_",
+                             self._print(expr.args[0]))
 
     def _print_PartialDerivative(self, expr):
         if len(expr.variables) == 1:
             return r"\frac{\partial}{\partial {%s}}{%s}" % (
                 self._print(expr.variables[0]),
-                self.parenthesize(expr.expr, PRECEDENCE["Mul"], False)
-            )
+                self.parenthesize(expr.expr, PRECEDENCE["Mul"], False))
         else:
-            return r"\frac{\partial^{%s}}{%s}{%s}" % (
-                len(expr.variables),
-                " ".join([r"\partial {%s}" % self._print(i) for i in expr.variables]),
-                self.parenthesize(expr.expr, PRECEDENCE["Mul"], False)
-            )
+            return r"\frac{\partial^{%s}}{%s}{%s}" % (len(
+                expr.variables), " ".join([
+                    r"\partial {%s}" % self._print(i) for i in expr.variables
+                ]), self.parenthesize(expr.expr, PRECEDENCE["Mul"], False))
 
     def _print_ArraySymbol(self, expr):
         return self._print(expr.name)
 
     def _print_ArrayElement(self, expr):
-        return "{{%s}_{%s}}" % (
-            self.parenthesize(expr.name, PRECEDENCE["Func"], True),
-            ", ".join([f"{self._print(i)}" for i in expr.indices]))
+        return "{{%s}_{%s}}" % (self.parenthesize(
+            expr.name, PRECEDENCE["Func"], True), ", ".join(
+                [f"{self._print(i)}" for i in expr.indices]))
 
     def _print_UniversalSet(self, expr):
         return r"\mathbb{U}"
 
     def _print_frac(self, expr, exp=None):
         if exp is None:
-            return r"\operatorname{frac}{\left(%s\right)}" % self._print(expr.args[0])
+            return r"\operatorname{frac}{\left(%s\right)}" % self._print(
+                expr.args[0])
         else:
-            return r"\operatorname{frac}{\left(%s\right)}^{%s}" % (
-                    self._print(expr.args[0]), exp)
+            return r"\operatorname{frac}{\left(%s\right)}^{%s}" % (self._print(
+                expr.args[0]), exp)
 
     def _print_tuple(self, expr):
         if self._settings['decimal_separator'] == 'comma':
@@ -2097,7 +2170,6 @@ class LatexPrinter(Printer):
         else:
             raise ValueError('Unknown Decimal Separator')
 
-
     def _print_dict(self, d):
         keys = sorted(d.keys(), key=default_sort_key)
         items = []
@@ -2126,7 +2198,8 @@ class LatexPrinter(Printer):
         power = self._print(expr.args[2])
         tex = r"{\left\langle %s \right\rangle}^{%s}" % (shift, power)
         if exp is not None:
-            tex = r"{\left({\langle %s \rangle}^{%s}\right)}^{%s}" % (shift, power, exp)
+            tex = r"{\left({\langle %s \rangle}^{%s}\right)}^{%s}" % (
+                shift, power, exp)
         return tex
 
     def _print_Heaviside(self, expr, exp=None):
@@ -2182,10 +2255,10 @@ class LatexPrinter(Printer):
             raise ValueError('Unknown Decimal Separator')
         return r"\left\{%s\right\}" % items
 
-
     _print_frozenset = _print_set
 
     def _print_Range(self, s):
+
         def _print_symbolic_range():
             # Symbolic Range that cannot be resolved
             if s.args[0] == 0:
@@ -2199,7 +2272,7 @@ class LatexPrinter(Printer):
                 else:
                     cont = ", ".join(self._print(arg) for arg in s.args)
 
-            return(f"\\text{{Range}}\\left({cont}\\right)")
+            return (f"\\text{{Range}}\\left({cont}\\right)")
 
         dots = object()
 
@@ -2223,18 +2296,18 @@ class LatexPrinter(Printer):
                 return _print_symbolic_range()
         else:
             return _print_symbolic_range()
-        return (r"\left\{" +
-                r", ".join(self._print(el) if el is not dots else r'\ldots' for el in printset) +
-                r"\right\}")
+        return (r"\left\{" + r", ".join(
+            self._print(el) if el is not dots else r'\ldots'
+            for el in printset) + r"\right\}")
 
     def __print_number_polynomial(self, expr, letter, exp=None):
         if len(expr.args) == 2:
             if exp is not None:
-                return r"%s_{%s}^{%s}\left(%s\right)" % (letter,
-                            self._print(expr.args[0]), exp,
-                            self._print(expr.args[1]))
-            return r"%s_{%s}\left(%s\right)" % (letter,
-                        self._print(expr.args[0]), self._print(expr.args[1]))
+                return r"%s_{%s}^{%s}\left(%s\right)" % (
+                    letter, self._print(
+                        expr.args[0]), exp, self._print(expr.args[1]))
+            return r"%s_{%s}\left(%s\right)" % (
+                letter, self._print(expr.args[0]), self._print(expr.args[1]))
 
         tex = r"%s_{%s}" % (letter, self._print(expr.args[0]))
         if exp is not None:
@@ -2249,10 +2322,10 @@ class LatexPrinter(Printer):
 
     def _print_bell(self, expr, exp=None):
         if len(expr.args) == 3:
-            tex1 = r"B_{%s, %s}" % (self._print(expr.args[0]),
-                                self._print(expr.args[1]))
-            tex2 = r"\left(%s\right)" % r", ".join(self._print(el) for
-                                               el in expr.args[2])
+            tex1 = r"B_{%s, %s}" % (self._print(
+                expr.args[0]), self._print(expr.args[1]))
+            tex2 = r"\left(%s\right)" % r", ".join(
+                self._print(el) for el in expr.args[2])
             if exp is not None:
                 tex = r"%s^{%s}%s" % (tex1, exp, tex2)
             else:
@@ -2275,12 +2348,9 @@ class LatexPrinter(Printer):
     def _print_SeqFormula(self, s):
         dots = object()
         if len(s.start.free_symbols) > 0 or len(s.stop.free_symbols) > 0:
-            return r"\left\{%s\right\}_{%s=%s}^{%s}" % (
-                self._print(s.formula),
-                self._print(s.variables[0]),
-                self._print(s.start),
-                self._print(s.stop)
-            )
+            return r"\left\{%s\right\}_{%s=%s}^{%s}" % (self._print(
+                s.formula), self._print(s.variables[0]), self._print(
+                    s.start), self._print(s.stop))
         if s.start is S.NegativeInfinity:
             stop = s.stop
             printset = (dots, s.coeff(stop - 3), s.coeff(stop - 2),
@@ -2291,9 +2361,9 @@ class LatexPrinter(Printer):
         else:
             printset = tuple(s)
 
-        return (r"\left[" +
-                r", ".join(self._print(el) if el is not dots else r'\ldots' for el in printset) +
-                r"\right]")
+        return (r"\left[" + r", ".join(
+            self._print(el) if el is not dots else r'\ldots'
+            for el in printset) + r"\right]")
 
     _print_SeqPer = _print_SeqFormula
     _print_SeqAdd = _print_SeqFormula
@@ -2345,8 +2415,7 @@ class LatexPrinter(Printer):
         prec = precedence_traditional(p)
         if len(p.sets) >= 1 and not has_variety(p.sets):
             return self.parenthesize(p.sets[0], prec) + "^{%d}" % len(p.sets)
-        return r" \times ".join(
-            self.parenthesize(set, prec) for set in p.sets)
+        return r" \times ".join(self.parenthesize(set, prec) for set in p.sets)
 
     def _print_EmptySet(self, e):
         return r"\emptyset"
@@ -2372,9 +2441,11 @@ class LatexPrinter(Printer):
     def _print_ImageSet(self, s):
         expr = s.lamda.expr
         sig = s.lamda.signature
-        xys = ((self._print(x), self._print(y)) for x, y in zip(sig, s.base_sets))
+        xys = ((self._print(x), self._print(y))
+               for x, y in zip(sig, s.base_sets))
         xinys = r", ".join(r"%s \in %s" % xy for xy in xys)
-        return r"\left\{%s\; \middle|\; %s\right\}" % (self._print(expr), xinys)
+        return r"\left\{%s\; \middle|\; %s\right\}" % (self._print(expr),
+                                                       xinys)
 
     def _print_ConditionSet(self, s):
         vars_print = ', '.join([self._print(var) for var in Tuple(s.sym)])
@@ -2383,10 +2454,8 @@ class LatexPrinter(Printer):
                 (vars_print, self._print(s.condition))
 
         return r"\left\{%s\; \middle|\; %s \in %s \wedge %s \right\}" % (
-            vars_print,
-            vars_print,
-            self._print(s.base_set),
-            self._print(s.condition))
+            vars_print, vars_print, self._print(
+                s.base_set), self._print(s.condition))
 
     def _print_PowerSet(self, expr):
         arg_print = self._print(expr.args[0])
@@ -2394,10 +2463,8 @@ class LatexPrinter(Printer):
 
     def _print_ComplexRegion(self, s):
         vars_print = ', '.join([self._print(var) for var in s.variables])
-        return r"\left\{%s\; \middle|\; %s \in %s \right\}" % (
-            self._print(s.expr),
-            vars_print,
-            self._print(s.sets))
+        return r"\left\{%s\; \middle|\; %s \in %s \right\}" % (self._print(
+            s.expr), vars_print, self._print(s.sets))
 
     def _print_Contains(self, e):
         return r"%s \in %s" % tuple(self._print(a) for a in e.args)
@@ -2572,7 +2639,9 @@ class LatexPrinter(Printer):
         return tex
 
     def _print_UnifiedTransform(self, expr, s, inverse=False):
-        return r"\mathcal{{{}}}{}_{{{}}}\left[{}\right]\left({}\right)".format(s, '^{-1}' if inverse else '', self._print(expr.args[1]), self._print(expr.args[0]), self._print(expr.args[2]))
+        return r"\mathcal{{{}}}{}_{{{}}}\left[{}\right]\left({}\right)".format(
+            s, '^{-1}' if inverse else '', self._print(expr.args[1]),
+            self._print(expr.args[0]), self._print(expr.args[2]))
 
     def _print_MellinTransform(self, expr):
         return self._print_UnifiedTransform(expr, 'M')
@@ -2621,7 +2690,7 @@ class LatexPrinter(Printer):
 
     def _print_LambertW(self, expr, exp=None):
         arg0 = self._print(expr.args[0])
-        exp = r"^{%s}" % (exp,) if exp is not None else ""
+        exp = r"^{%s}" % (exp, ) if exp is not None else ""
         if len(expr.args) == 1:
             result = r"W%s\left(%s\right)" % (exp, arg0)
         else:
@@ -2630,16 +2699,20 @@ class LatexPrinter(Printer):
         return result
 
     def _print_Expectation(self, expr):
-        return r"\operatorname{{E}}\left[{}\right]".format(self._print(expr.args[0]))
+        return r"\operatorname{{E}}\left[{}\right]".format(
+            self._print(expr.args[0]))
 
     def _print_Variance(self, expr):
-        return r"\operatorname{{Var}}\left({}\right)".format(self._print(expr.args[0]))
+        return r"\operatorname{{Var}}\left({}\right)".format(
+            self._print(expr.args[0]))
 
     def _print_Covariance(self, expr):
-        return r"\operatorname{{Cov}}\left({}\right)".format(", ".join(self._print(arg) for arg in expr.args))
+        return r"\operatorname{{Cov}}\left({}\right)".format(", ".join(
+            self._print(arg) for arg in expr.args))
 
     def _print_Probability(self, expr):
-        return r"\operatorname{{P}}\left({}\right)".format(self._print(expr.args[0]))
+        return r"\operatorname{{P}}\left({}\right)".format(
+            self._print(expr.args[0]))
 
     def _print_Morphism(self, morphism):
         domain = self._print(morphism.domain)
@@ -2653,14 +2726,14 @@ class LatexPrinter(Printer):
     def _print_Series(self, expr):
         args = list(expr.args)
         parens = lambda x: self.parenthesize(x, precedence_traditional(expr),
-                                            False)
+                                             False)
         return ' '.join(map(parens, args))
 
     def _print_MIMOSeries(self, expr):
         from sympy.physics.control.lti import MIMOParallel
         args = list(expr.args)[::-1]
-        parens = lambda x: self.parenthesize(x, precedence_traditional(expr),
-                                             False) if isinstance(x, MIMOParallel) else self._print(x)
+        parens = lambda x: self.parenthesize(x, precedence_traditional(
+            expr), False) if isinstance(x, MIMOParallel) else self._print(x)
         return r"\cdot".join(map(parens, args))
 
     def _print_Parallel(self, expr):
@@ -2680,12 +2753,14 @@ class LatexPrinter(Printer):
 
         if isinstance(num, Series) and isinstance(expr.sys2, Series):
             den_term_2 = Series(*num_arg_list, *den_arg_list)
-        elif isinstance(num, Series) and isinstance(expr.sys2, TransferFunction):
+        elif isinstance(num, Series) and isinstance(expr.sys2,
+                                                    TransferFunction):
             if expr.sys2 == tf:
                 den_term_2 = Series(*num_arg_list)
             else:
                 den_term_2 = tf, Series(*num_arg_list, expr.sys2)
-        elif isinstance(num, TransferFunction) and isinstance(expr.sys2, Series):
+        elif isinstance(num, TransferFunction) and isinstance(
+                expr.sys2, Series):
             if num == tf:
                 den_term_2 = Series(*den_arg_list)
             else:
@@ -2710,7 +2785,8 @@ class LatexPrinter(Printer):
         inv_mat = self._print(MIMOSeries(expr.sys2, expr.sys1))
         sys1 = self._print(expr.sys1)
         _sign = "+" if expr.sign == -1 else "-"
-        return r"\left(I_{\tau} %s %s\right)^{-1} \cdot %s" % (_sign, inv_mat, sys1)
+        return r"\left(I_{\tau} %s %s\right)^{-1} \cdot %s" % (_sign, inv_mat,
+                                                               sys1)
 
     def _print_TransferFunctionMatrix(self, expr):
         mat = self._print(expr._expr_mat)
@@ -2718,6 +2794,7 @@ class LatexPrinter(Printer):
 
     def _print_DFT(self, expr):
         return r"\text{{{}}}_{{{}}}".format(expr.__class__.__name__, expr.n)
+
     _print_IDFT = _print_DFT
 
     def _print_NamedMorphism(self, morphism):
@@ -2727,14 +2804,16 @@ class LatexPrinter(Printer):
 
     def _print_IdentityMorphism(self, morphism):
         from sympy.categories import NamedMorphism
-        return self._print_NamedMorphism(NamedMorphism(
-            morphism.domain, morphism.codomain, "id"))
+        return self._print_NamedMorphism(
+            NamedMorphism(morphism.domain, morphism.codomain, "id"))
 
     def _print_CompositeMorphism(self, morphism):
         # All components of the morphism have names and it is thus
         # possible to build the name of the composite.
-        component_names_list = [self._print(Symbol(component.name)) for
-                                component in morphism.components]
+        component_names_list = [
+            self._print(Symbol(component.name))
+            for component in morphism.components
+        ]
         component_names_list.reverse()
         component_names = "\\circ ".join(component_names_list) + ":"
 
@@ -2779,8 +2858,8 @@ class LatexPrinter(Printer):
 
     def _print_FreeModuleElement(self, m):
         # Print as row vector for convenience, for now.
-        return r"\left[ {} \right]".format(",".join(
-            '{' + self._print(x) + '}' for x in m))
+        return r"\left[ {} \right]".format(",".join('{' + self._print(x) + '}'
+                                                    for x in m))
 
     def _print_SubModule(self, m):
         return r"\left\langle {} \right\rangle".format(",".join(
@@ -2793,32 +2872,35 @@ class LatexPrinter(Printer):
     def _print_Quaternion(self, expr):
         # TODO: This expression is potentially confusing,
         # shall we print it as `Quaternion( ... )`?
-        s = [self.parenthesize(i, PRECEDENCE["Mul"], strict=True)
-             for i in expr.args]
-        a = [s[0]] + [i+" "+j for i, j in zip(s[1:], "ijk")]
+        s = [
+            self.parenthesize(i, PRECEDENCE["Mul"], strict=True)
+            for i in expr.args
+        ]
+        a = [s[0]] + [i + " " + j for i, j in zip(s[1:], "ijk")]
         return " + ".join(a)
 
     def _print_QuotientRing(self, R):
         # TODO nicer fractions for few generators...
         return r"\frac{{{}}}{{{}}}".format(self._print(R.ring),
-                 self._print(R.base_ideal))
+                                           self._print(R.base_ideal))
 
     def _print_QuotientRingElement(self, x):
         return r"{{{}}} + {{{}}}".format(self._print(x.data),
-                 self._print(x.ring.base_ideal))
+                                         self._print(x.ring.base_ideal))
 
     def _print_QuotientModuleElement(self, m):
         return r"{{{}}} + {{{}}}".format(self._print(m.data),
-                 self._print(m.module.killed_module))
+                                         self._print(m.module.killed_module))
 
     def _print_QuotientModule(self, M):
         # TODO nicer fractions for few generators...
         return r"\frac{{{}}}{{{}}}".format(self._print(M.base),
-                 self._print(M.killed_module))
+                                           self._print(M.killed_module))
 
     def _print_MatrixHomomorphism(self, h):
-        return r"{{{}}} : {{{}}} \to {{{}}}".format(self._print(h._sympy_matrix()),
-            self._print(h.domain), self._print(h.codomain))
+        return r"{{{}}} : {{{}}} \to {{{}}}".format(
+            self._print(h._sympy_matrix()), self._print(h.domain),
+            self._print(h.codomain))
 
     def _print_Manifold(self, manifold):
         string = manifold.name.name
@@ -2840,12 +2922,13 @@ class LatexPrinter(Printer):
         return name
 
     def _print_Patch(self, patch):
-        return r'\text{%s}_{%s}' % (self._print(patch.name), self._print(patch.manifold))
+        return r'\text{%s}_{%s}' % (self._print(
+            patch.name), self._print(patch.manifold))
 
     def _print_CoordSystem(self, coordsys):
-        return r'\text{%s}^{\text{%s}}_{%s}' % (
-            self._print(coordsys.name), self._print(coordsys.patch.name), self._print(coordsys.manifold)
-        )
+        return r'\text{%s}^{\text{%s}}_{%s}' % (self._print(
+            coordsys.name), self._print(
+                coordsys.patch.name), self._print(coordsys.manifold))
 
     def _print_CovarDerivativeOp(self, cvd):
         return r'\mathbb{\nabla}_{%s}' % self._print(cvd._wrt)
@@ -2886,8 +2969,8 @@ class LatexPrinter(Printer):
 
     def _print_divisor_sigma(self, expr, exp=None):
         if len(expr.args) == 2:
-            tex = r"_%s\left(%s\right)" % tuple(map(self._print,
-                                                (expr.args[1], expr.args[0])))
+            tex = r"_%s\left(%s\right)" % tuple(
+                map(self._print, (expr.args[1], expr.args[0])))
         else:
             tex = r"\left(%s\right)" % self._print(expr.args[0])
         if exp is not None:
@@ -2896,8 +2979,8 @@ class LatexPrinter(Printer):
 
     def _print_udivisor_sigma(self, expr, exp=None):
         if len(expr.args) == 2:
-            tex = r"_%s\left(%s\right)" % tuple(map(self._print,
-                                                (expr.args[1], expr.args[0])))
+            tex = r"_%s\left(%s\right)" % tuple(
+                map(self._print, (expr.args[1], expr.args[0])))
         else:
             tex = r"\left(%s\right)" % self._print(expr.args[0])
         if exp is not None:
@@ -2932,7 +3015,8 @@ class LatexPrinter(Printer):
         return str(expr)
 
     def _print_Predicate(self, expr):
-        return r"\operatorname{{Q}}_{{\text{{{}}}}}".format(latex_escape(str(expr.name)))
+        return r"\operatorname{{Q}}_{{\text{{{}}}}}".format(
+            latex_escape(str(expr.name)))
 
     def _print_AppliedPredicate(self, expr):
         pred = expr.function
@@ -2976,7 +3060,6 @@ def translate(s: str) -> str:
             if s.lower().endswith(key) and len(s) > len(key):
                 return modifier_dict[key](translate(s[:-len(key)]))
         return s
-
 
 
 @print_function(LatexPrinter)
@@ -3201,7 +3284,12 @@ def print_latex(expr, **settings):
     print(latex(expr, **settings))
 
 
-def multiline_latex(lhs, rhs, terms_per_line=1, environment="align*", use_dots=False, **settings):
+def multiline_latex(lhs,
+                    rhs,
+                    terms_per_line=1,
+                    environment="align*",
+                    use_dots=False,
+                    **settings):
     r"""
     This function generates a LaTeX equation with a multiline right-hand side
     in an ``align*``, ``eqnarray`` or ``IEEEeqnarray`` environment.
@@ -3285,13 +3373,13 @@ def multiline_latex(lhs, rhs, terms_per_line=1, environment="align*", use_dots=F
         result = r'\begin{align*}' + '\n'
         first_term = '= &'
         nonumber = ''
-        end_term =  '\n\\end{align*}'
+        end_term = '\n\\end{align*}'
         doubleet = False
     else:
         raise ValueError("Unknown environment: {}".format(environment))
     dots = ''
     if use_dots:
-        dots=r'\dots'
+        dots = r'\dots'
     terms = rhs.as_ordered_terms()
     n_terms = len(terms)
     term_count = 1
@@ -3308,23 +3396,23 @@ def multiline_latex(lhs, rhs, terms_per_line=1, environment="align*", use_dots=F
             term_count = 1
         if term_count == terms_per_line:
             # End of line
-            if i < n_terms-1:
+            if i < n_terms - 1:
                 # There are terms remaining
                 term_end = dots + nonumber + r'\\' + '\n'
             else:
                 term_end = ''
 
         if term.as_ordered_factors()[0] == -1:
-            term = -1*term
+            term = -1 * term
             sign = r'-'
-        if i == 0: # beginning
+        if i == 0:  # beginning
             if sign == '+':
                 sign = ''
-            result += r'{:s} {:s}{:s} {:s} {:s}'.format(l.doprint(lhs),
-                        first_term, sign, l.doprint(term), term_end)
+            result += r'{:s} {:s}{:s} {:s} {:s}'.format(
+                l.doprint(lhs), first_term, sign, l.doprint(term), term_end)
         else:
             result += r'{:s}{:s} {:s} {:s}'.format(term_start, sign,
-                        l.doprint(term), term_end)
+                                                   l.doprint(term), term_end)
         term_count += 1
     result += end_term
     return result

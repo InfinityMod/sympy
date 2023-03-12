@@ -123,6 +123,7 @@ CMD_BINOM: '\\binom';
 CMD_DBINOM: '\\dbinom';
 CMD_TBINOM: '\\tbinom';
 
+CMD_TEXT: '\\text';
 CMD_MATHIT: '\\mathit';
 
 UNDERSCORE: '_';
@@ -153,6 +154,8 @@ BANG: '!';
 SINGLE_QUOTES: '\''+;
 
 SYMBOL: '\\' [a-zA-Z]+;
+
+special: (GT | GTE | LT | LTE | UNDERSCORE | L_BRACKET | R_BRACKET | COLON | BANG | EQUAL | NEQ);
 
 math: relation;
 
@@ -234,6 +237,7 @@ atom: (LETTER | SYMBOL) (subexpr? SINGLE_QUOTES? | SINGLE_QUOTES? subexpr?)
 	| number
 	| DIFFERENTIAL
 	| mathit
+	| text
 	| frac
 	| binom
 	| bra
@@ -243,7 +247,10 @@ bra: L_ANGLE expr (R_BAR | BAR);
 ket: (L_BAR | BAR) expr R_ANGLE;
 
 mathit: CMD_MATHIT L_BRACE mathit_text R_BRACE;
-mathit_text: LETTER*;
+mathit_text: (LETTER | DIGIT | special)*;
+
+text: CMD_TEXT L_BRACE text_text R_BRACE;
+text_text: (LETTER | DIGIT | special)*;
 
 frac: CMD_FRAC (upperd = DIGIT | L_BRACE upper = expr R_BRACE)
     (lowerd = DIGIT | L_BRACE lower = expr R_BRACE);
@@ -279,12 +286,12 @@ func_normal:
 	| FUNC_ARTANH;
 
 func:
-	func_normal (subexpr? supexpr? | supexpr? subexpr?) (
+	func_normal (subexpr? supexpr? | supexpr? subexpr?) (L_BRACE?) (
 		L_PAREN func_arg R_PAREN
 		| func_arg_noparens
-	)
+	) (R_BRACE?)
 	| (LETTER | SYMBOL) (subexpr? SINGLE_QUOTES? | SINGLE_QUOTES? subexpr?) // e.g. f(x), f_1'(x)
-	L_PAREN args R_PAREN
+	(L_BRACE?) L_PAREN args R_PAREN (R_BRACE?)
 	| FUNC_INT (subexpr supexpr | supexpr subexpr)? (
 		additive? DIFFERENTIAL
 		| frac
