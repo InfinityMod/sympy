@@ -247,7 +247,7 @@ bra: L_ANGLE expr (R_BAR | BAR);
 ket: (L_BAR | BAR) expr R_ANGLE;
 
 mathit: CMD_MATHIT L_BRACE mathit_text R_BRACE;
-mathit_text: (LETTER | DIGIT | special)*;
+mathit_text: (LETTER | DIGIT | special | atom)*;
 
 text: CMD_TEXT L_BRACE text_text R_BRACE;
 text_text: (LETTER | DIGIT | special)*;
